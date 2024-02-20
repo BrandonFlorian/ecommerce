@@ -2,19 +2,21 @@
 
 import type { InputProps } from "@nextui-org/react";
 
-import React, { FC } from "react";
+import React from "react";
 import { Button, Input, Checkbox, Link, Divider } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { useAuth } from "@/context/AuthContext";
 
 type LoginProps = {
   toggleAuthMode: () => void;
+  login: (formData: FormData) => void;
 };
 
 export default function Login({ toggleAuthMode }: LoginProps) {
   const [isVisible, setIsVisible] = React.useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
-
+  const { login } = useAuth();
   const inputClasses: InputProps["classNames"] = {
     inputWrapper:
       "border-transparent bg-default-50/40 dark:bg-default-50/20 group-data-[focus=true]:border-primary data-[hover=true]:border-foreground/20",
@@ -28,7 +30,13 @@ export default function Login({ toggleAuthMode }: LoginProps) {
       <p className="pb-2 text-xl font-medium">Log In</p>
       <form
         className="flex flex-col gap-3"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          const email = formData.get("email") as string;
+          const password = formData.get("password") as string;
+          await login(email, password);
+        }}
       >
         <Input
           classNames={inputClasses}

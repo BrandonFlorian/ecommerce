@@ -15,6 +15,8 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import AvatarDropdown from "../avatar-dropdown/avatar-dropdown";
 
 const menuItems = [
   "About",
@@ -27,11 +29,15 @@ const menuItems = [
   "Contact Us",
 ];
 
-export default function NavigationBar(props: NavbarProps) {
+interface NavigationBarProps extends NavbarProps {
+  //logout: () => Promise<void>;
+}
+
+export default function NavigationBar() {
   const router = useRouter();
+  const { session, user, logout } = useAuth();
   return (
     <Navbar
-      {...props}
       classNames={{
         base: "py-4 backdrop-filter-none bg-transparent",
         wrapper: "px-0 w-full justify-center bg-transparent",
@@ -81,16 +87,34 @@ export default function NavigationBar(props: NavbarProps) {
             Support
           </Link>
         </NavbarItem>
-        <NavbarItem className="ml-2 !flex">
-          <Button
-            radius="full"
-            variant="flat"
-            onClick={() => {
-              router.push("/auth");
-            }}
+        <NavbarItem isActive>
+          <Link
+            aria-current="page"
+            color="foreground"
+            href="/profile"
+            size="sm"
           >
-            Login
-          </Button>
+            Profile
+          </Link>
+        </NavbarItem>
+        <NavbarItem className="ml-2 !flex">
+          {session?.access_token ? (
+            <AvatarDropdown
+              email={user?.email ?? ""}
+              logout={logout}
+              links={menuItems}
+            />
+          ) : (
+            <Button
+              radius="full"
+              variant="flat"
+              onClick={() => {
+                router.push("/auth");
+              }}
+            >
+              Login
+            </Button>
+          )}
         </NavbarItem>
       </NavbarContent>
 

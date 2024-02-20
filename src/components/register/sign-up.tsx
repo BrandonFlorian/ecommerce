@@ -5,16 +5,17 @@ import type { InputProps } from "@nextui-org/react";
 import React from "react";
 import { Button, Input, Checkbox, Link, Divider } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-type RegisterProps = {
+import { useAuth } from "@/context/AuthContext";
+type SignUpProps = {
   toggleAuthMode: () => void;
+  signUp: (formData: FormData) => void;
 };
-export default function Register({ toggleAuthMode }: RegisterProps) {
+export default function SignUp({ toggleAuthMode }: SignUpProps) {
   const [isVisible, setIsVisible] = React.useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = React.useState(false);
-
   const toggleVisibility = () => setIsVisible(!isVisible);
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
-
+  const { signUp } = useAuth();
   const inputClasses: InputProps["classNames"] = {
     inputWrapper:
       "border-transparent bg-default-50/40 dark:bg-default-50/20 group-data-[focus=true]:border-primary data-[hover=true]:border-foreground/20",
@@ -27,7 +28,14 @@ export default function Register({ toggleAuthMode }: RegisterProps) {
       <p className="pb-2 text-xl font-medium">Sign Up</p>
       <form
         className="flex flex-col gap-3"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          const username = formData.get("username") as string;
+          const email = formData.get("email") as string;
+          const password = formData.get("password") as string;
+          await signUp(email, password);
+        }}
       >
         <Input
           isRequired

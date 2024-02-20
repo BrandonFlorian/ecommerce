@@ -1,0 +1,42 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Market",
+    "dateExported": "2024-02-20T02:54:30.898Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "a5acb970-5ab1-4470-aa85-39a9c9ff3d63",
+            "colId": "fc914c1a-5a33-4855-87a1-5b4cf9cd0273",
+            "containerId": "",
+            "name": "Get User",
+            "url": "http://localhost:3000/users/948d4dea-4f00-456c-8d41-0e9b31adc89b",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2024-01-08T01:14:23.196Z",
+            "modified": "2024-01-08T01:18:28.228Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "772252e4-5e81-42ca-b53b-9990b371299f",
+            "colId": "fc914c1a-5a33-4855-87a1-5b4cf9cd0273",
+            "containerId": "",
+            "name": "Get Products",
+            "url": "http://localhost:3000/api/products",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2024-02-20T02:52:25.857Z",
+            "modified": "2024-02-20T02:53:05.694Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ],
+    "settings": {
+        "options": {
+            "baseUrl": "https://localhost:3000"
+        }
+    }
+}
