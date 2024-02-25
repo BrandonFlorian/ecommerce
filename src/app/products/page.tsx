@@ -12,6 +12,5 @@ const getProducts = async () => {
 
 export default async function Register() {
   const products = await getProducts();
-  console.log("products", products);
   return <ProductsGrid />;
 }

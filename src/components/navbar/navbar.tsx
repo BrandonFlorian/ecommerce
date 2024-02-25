@@ -36,6 +36,7 @@ interface NavigationBarProps extends NavbarProps {
 export default function NavigationBar() {
   const router = useRouter();
   const { session, user, logout } = useAuth();
+
   return (
     <Navbar
       classNames={{
@@ -91,7 +92,7 @@ export default function NavigationBar() {
           <Link
             aria-current="page"
             color="foreground"
-            href="/profile"
+            href={`/profile/${user?.user_metadata.username ?? ""}`}
             size="sm"
           >
             Profile

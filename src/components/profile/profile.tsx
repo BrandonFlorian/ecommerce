@@ -9,7 +9,11 @@ import { Icon } from "@iconify/react";
 import AccountDetails from "./account-details";
 import NotificationsSettings from "./notification-settings";
 import SecuritySettings from "./security-settings";
-export default function Profile(props: CardProps) {
+import { ProfileFormProps } from "./types";
+export default function Profile({
+  profileFormData,
+  ...props
+}: ProfileFormProps) {
   const { session, user } = useAuth();
   return (
     <Card {...props}>
@@ -30,7 +34,10 @@ export default function Profile(props: CardProps) {
             </div>
           }
         >
-          <AccountDetails className="p-2  shadow-none" />
+          <AccountDetails
+            className="p-2  shadow-none"
+            profileFormData={profileFormData}
+          />
         </Tab>
         <Tab
           key="notifications-settings"

@@ -21,7 +21,7 @@ interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  signUp: (username: string, email: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,8 +41,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log("Context Session Event: ", event, session);
-
         setSession(session);
         setUser(session?.user || null);
 
@@ -70,13 +68,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (email: string, password: string) => {
     try {
-      console.log("context login email", email + " " + password);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
-      console.log("context login data", data);
       router.push("/");
     } catch (error) {
       console.log("error", error);
@@ -93,11 +89,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (username: string, email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { username } },
+      });
       if (error) throw error;
-      console.log("context sign up data", data);
       router.push("/");
     } catch (error) {
       console.log("error", error);

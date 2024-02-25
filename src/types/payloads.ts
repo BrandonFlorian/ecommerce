@@ -1,13 +1,9 @@
-export type ProfileUpdatePayload = {
+type ProfilePayload = {
+  id: string;
+  first_name: string;
+  last_name: string;
   username: string;
+  phone_number: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  country: string;
-  state: string;
-  zip: string;
-  address: string;
-  bio: string;
-  avatar: string;
+  profile_image_url: string;
 };

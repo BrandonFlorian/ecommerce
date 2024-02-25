@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
       { status: HTTP_STATUS_CODES.METHOD_NOT_ALLOWED }
     );
   }
+
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   if (!supabase) {
@@ -28,12 +29,6 @@ export async function GET(request: NextRequest) {
   const sort = searchParams.get("sort");
   const order = searchParams.get("order");
 
-  console.log("data", {
-    productId,
-    query,
-    sort,
-    order,
-  });
   // If a product ID is provided, fetch the single product
   if (productId) {
     return await getProductById(request, productId, supabase);
@@ -145,8 +140,6 @@ async function getProductsByQuery(
         [order]: sort,
       };
     }
-
-    console.log("orderByObj", orderByObj);
 
     const { data: products, error } = await supabase
       .from("product")
