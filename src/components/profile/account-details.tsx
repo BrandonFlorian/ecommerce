@@ -1,7 +1,7 @@
 "use client";
 
-import { useForm, SubmitHandler } from "react-hook-form";
-import React from "react";
+import { useForm, SubmitHandler, Form } from "react-hook-form";
+import React, { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -20,35 +20,44 @@ import { countries } from "@/utils/constants";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ProfileFormProps } from "./types";
-
+import { toast } from "sonner";
 const schema = yup
   .object({
-    first_name: yup.string().required(),
-    last_name: yup.string().required(),
+    id: yup.string().required(),
+    first_name: yup.string().notRequired(),
+    last_name: yup.string().notRequired(),
     email: yup.string().email().required(),
     username: yup.string().required(),
-    phone_number: yup.string().required(),
+    phone_number: yup.string().notRequired(),
+    profile_image_url: yup.string().notRequired(),
   })
   .required();
 
 export default function ProfileForm({
   profileFormData,
   ...props
-}: ProfileFormProps) {
+}: Readonly<ProfileFormProps>) {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm<ProfilePayload>({
     defaultValues: profileFormData,
+    resolver: yupResolver<ProfilePayload>(
+      schema as yup.ObjectSchema<ProfilePayload>
+    ),
   });
   const onSubmit: SubmitHandler<ProfilePayload> = async (
-    data: ProfilePayload
+    payload: ProfilePayload
   ) => {
-    const { id, first_name, last_name, email, username, phone_number } = data;
+    setLoading(true);
+    const { id, first_name, last_name, email, username, phone_number } =
+      payload;
     const response = await fetch(`/api/profile?id=${id}`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -60,9 +69,14 @@ export default function ProfileForm({
         username,
         phone_number,
       }),
-    });
-    const json = response.json();
-    console.log(json);
+    }).catch((error) => console.error("Fetch error:", error));
+    if (!response) {
+      console.error("Server responded with an error:", response);
+      return;
+    }
+    const data = await response.json();
+    setLoading(false);
+    toast("Profile Updated");
   };
 
   return (
@@ -72,7 +86,7 @@ export default function ProfileForm({
           <p className="text-large">Account Details</p>
           <div className="flex gap-4 py-4">
             <Badge
-              disableOutline
+              //disableOutline
               classNames={{
                 badge: "w-5 h-5",
               }}
@@ -197,7 +211,12 @@ export default function ProfileForm({
           <Button radius="full" variant="bordered">
             Cancel
           </Button>
-          <Button color="primary" radius="full" type="submit">
+          <Button
+            color="primary"
+            radius="full"
+            type="submit"
+            isLoading={loading}
+          >
             Save Changes
           </Button>
         </CardFooter>

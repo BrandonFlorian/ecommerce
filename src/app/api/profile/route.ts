@@ -123,12 +123,12 @@ async function getProfileByUsername(
   }
 }
 
-export async function PUT(request: NextRequest) {
-  if (request.method !== "PUT") {
-    console.error("Request method is not PUT");
+export async function POST(request: NextRequest) {
+  if (request.method !== "POST") {
+    console.error("Request method is not POST");
 
     return NextResponse.json(
-      { message: "Request method is not PUT" },
+      { message: "Request method is not POST" },
       { status: HTTP_STATUS_CODES.METHOD_NOT_ALLOWED }
     );
   }
@@ -196,6 +196,8 @@ async function updateProfile(
         { status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR }
       );
     }
+
+    console.log("No error. profile return: ", profile);
 
     // if (!profile) {
     //   return NextResponse.json(

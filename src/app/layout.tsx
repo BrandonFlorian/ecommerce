@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import RootStyleRegistry from "./providers";
 import NavigationBar from "@/components/navbar/navbar";
 import Footer from "@/components/footer/footer";
-
+import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,6 +23,7 @@ export default async function RootLayout({
         <RootStyleRegistry>
           <NavigationBar />
           {children}
+          <Toaster />
           <Footer />
         </RootStyleRegistry>
       </body>
